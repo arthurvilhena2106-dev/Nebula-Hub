@@ -1,23 +1,23 @@
--- Carrega a Biblioteca de Interface Rayfield (Muito mais estável para celular)
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
+-- Garante o carregamento seguro da Rayfield Library
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Cria a Janela Principal (Preto, Azul e Branco)
+-- Cria a Janela Principal (Tema Customizado: Preto, Azul e Branco)
 local Window = Rayfield:CreateWindow({
    Name = "🌌 Nebula Hub | Blox Fruits",
    LoadingTitle = "Carregando Nebula Hub...",
-   LoadingSubtitle = "by Arthur Vilhena",
+   LoadingSubtitle = "Criado por Arthur Vilhena",
    ConfigurationSaving = {
       Enabled = false
    },
-   KeySystem = false -- Sem Key!
+   KeySystem = false -- Deixado SEM KEY como você pediu!
 })
 
--- Criando as Variáveis de Controle
+-- Inicializa as Variáveis de Controle
 getgenv().AutoFarm = false
 getgenv().AutoSpend = false
 getgenv().AutoClick = false
 
--- Criando as Abas no Menu
+-- Cria as Abas do Menu Visual
 local FarmTab = Window:CreateTab("Auto Farm", 4483345998)
 local ShopTab = Window:CreateTab("Loja do Evento", 4483345998)
 
@@ -68,13 +68,17 @@ function runAutoFarm()
         local player = game.Players.LocalPlayer
         while getgenv().AutoFarm do
             task.wait(1)
+            -- Comando para iniciar a missão no servidor do Blox Fruits
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", "MagnetEventQuest1", 1)
+            
+            -- Varre o mapa procurando os NPCs específicos
             for _, npc in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                 if npc.Name == "Magnet Bandit" and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 then
                     while npc.Humanoid.Health > 0 and getgenv().AutoFarm do
                         task.wait()
                         local character = player.Character
                         if character and character:FindFirstChild("HumanoidRootPart") then
+                            -- Teleporta mantendo o personagem voando acima do NPC por segurança
                             character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame * CFrame.new(0, 5, 0)
                         end
                     end
@@ -88,7 +92,7 @@ function runAutoClick()
     task.spawn(function()
         local virtualUser = game:GetService("VirtualUser")
         while getgenv().AutoClick do
-            task.wait(0.1)
+            task.wait(0.1) -- Ritmo do clique rápido
             virtualUser:CaptureController()
             virtualUser:Button1Down(Vector2.new(0,0), game.Workspace.CurrentCamera.CFrame)
         end
@@ -99,6 +103,7 @@ function runAutoSpend()
     task.spawn(function()
         while getgenv().AutoSpend do
             task.wait(2) 
+            -- Dispara a função remota de compra na loja do evento
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyMagnetGacha", "MainStore")
         end
     end)
