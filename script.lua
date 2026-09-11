@@ -1,75 +1,64 @@
--- Carrega a Biblioteca de Interface Visual Atualizada (Orion Library)
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
+-- Carrega a Biblioteca de Interface Rayfield (Muito mais estável para celular)
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
 
--- Customização de Cores (Preto, Azul e Branco)
-OrionLib.Themes = {
-    Default = {
-        Main = Color3.fromRGB(15, 15, 15),       -- Fundo Principal (Preto Escuro)
-        Second = Color3.fromRGB(25, 25, 25),     -- Fundo Secundário (Preto)
-        Stroke = Color3.fromRGB(0, 102, 255),    -- Bordas (Azul Neon)
-        Divider = Color3.fromRGB(0, 102, 255),   -- Linhas Divisórias (Azul)
-        Text = Color3.fromRGB(255, 255, 255),    -- Texto Geral (Branco)
-        TextLight = Color3.fromRGB(200, 200, 200),-- Texto Secundário (Branco Fosco)
-        TextColor = Color3.fromRGB(255, 255, 255),-- Texto dos Botões (Branco)
-        SelectedTab = Color3.fromRGB(0, 102, 255),-- Aba Selecionada (Azul)
-        Tab = Color3.fromRGB(150, 150, 150),     -- Aba Não Selecionada (Cinza Claro)
-        Toggle = Color3.fromRGB(0, 102, 255),    -- Botão Ativado (Azul)
-        ToggleDisabled = Color3.fromRGB(40, 40, 40) -- Botão Desativado (Preto Fosco)
-    }
-}
-
--- Cria a Janela Principal com o Novo Nome e Tema
-local Window = OrionLib:MakeWindow({
-    Name = "🌌 Nebula Hub | Blox Fruits", 
-    HidePremium = true, 
-    SaveConfig = false, 
-    IntroText = "Carregando Nebula Hub..."
+-- Cria a Janela Principal (Preto, Azul e Branco)
+local Window = Rayfield:CreateWindow({
+   Name = "🌌 Nebula Hub | Blox Fruits",
+   LoadingTitle = "Carregando Nebula Hub...",
+   LoadingSubtitle = "by Arthur Vilhena",
+   ConfigurationSaving = {
+      Enabled = false
+   },
+   KeySystem = false -- Sem Key!
 })
 
--- Criando as Variáveis de Controle (Ligar/Desligar)
+-- Criando as Variáveis de Controle
 getgenv().AutoFarm = false
 getgenv().AutoSpend = false
 getgenv().AutoClick = false
 
 -- Criando as Abas no Menu
-local FarmTab = Window:MakeTab({ Name = "Auto Farm", Icon = "rbxassetid://4483345998", PremiumOnly = false })
-local ShopTab = Window:MakeTab({ Name = "Loja do Evento", Icon = "rbxassetid://4483345998", PremiumOnly = false })
+local FarmTab = Window:CreateTab("Auto Farm", 4483345998)
+local ShopTab = Window:CreateTab("Loja do Evento", 4483345998)
 
 -- ==================== ABA: AUTO FARM ====================
 
-FarmTab:AddToggle({
-    Name = "Iniciar Auto Farm",
-    Default = false,
-    Callback = function(Value)
-        getgenv().AutoFarm = Value
-        if Value then
-            runAutoFarm()
-        end
-    end    
+FarmTab:CreateToggle({
+   Name = "Iniciar Auto Farm",
+   CurrentValue = false,
+   Flag = "ToggleAutoFarm",
+   Callback = function(Value)
+      getgenv().AutoFarm = Value
+      if Value then
+          runAutoFarm()
+      end
+   end,
 })
 
-FarmTab:AddToggle({
-    Name = "Ativar Clique Rápido",
-    Default = false,
-    Callback = function(Value)
-        getgenv().AutoClick = Value
-        if Value then
-            runAutoClick()
-        end
-    end    
+FarmTab:CreateToggle({
+   Name = "Ativar Clique Rápido",
+   CurrentValue = false,
+   Flag = "ToggleAutoClick",
+   Callback = function(Value)
+      getgenv().AutoClick = Value
+      if Value then
+          runAutoClick()
+      end
+   end,
 })
 
 -- ==================== ABA: LOJA DO EVENTO ====================
 
-ShopTab:AddToggle({
-    Name = "Gastar Moedas Automaticamente",
-    Default = false,
-    Callback = function(Value)
-        getgenv().AutoSpend = Value
-        if Value then
-            runAutoSpend()
-        end
-    end    
+ShopTab:CreateToggle({
+   Name = "Gastar Moedas Automaticamente",
+   CurrentValue = false,
+   Flag = "ToggleAutoSpend",
+   Callback = function(Value)
+      getgenv().AutoSpend = Value
+      if Value then
+          runAutoSpend()
+      end
+   end,
 })
 
 -- ==================== FUNÇÕES LÓGICAS DO SCRIPT ====================
@@ -114,6 +103,4 @@ function runAutoSpend()
         end
     end)
 end
-
-OrionLib:Init()
 
